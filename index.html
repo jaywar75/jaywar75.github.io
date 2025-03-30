@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vuluru. nextgen core-AI business platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary: #6200EA;
+            --primary-light: #9D46FF;
+            --primary-dark: #3700B3;
+            --secondary: #03DAC6;
+            --secondary-dark: #018786;
+            --dark: #121212;
+            --light: #FFFFFF;
+            --gray: #F5F5F7;
+            --accent: #BB86FC;
+            --gradient: linear-gradient(135deg, #6200EA 0%, #BB86FC 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            min-width: 160px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary {
+            background: var(--dark);
+            color: var(--light);
+            border: 2px solid var(--secondary);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .btn-primary:hover {
+            color: var(--light);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(3, 218, 198, 0.2);
+        }
+
+        .btn-primary:hover::before {
+            left: 0;
+        }
+
+        .btn-outline {
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            background: transparent;
+        }
+
+        .btn-outline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--secondary);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .btn-outline:hover {
+            color: var(--dark);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 14px rgba(3, 218, 198, 0.2);
+        }
+
+        .btn-outline:hover::before {
+            height: 100%;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #CCC;
+            max-width: 700px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.5rem 0;
+            background: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 1rem 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .logo span {
+            color: var(--primary-light);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links li {
+            margin: 0 1rem;
+        }
+
+        .nav-links a {
+            position: relative;
+            font-weight: 500;
+            padding-bottom: 5px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+                position: relative;
+                min-height: 75vh;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                padding: 60px 0 30px;
+                background-color: var(--dark); /* Base dark color (#121212) */
+                background-image: url('/static/images/subtle-pattern.png'), /* Subtle pattern */
+                                radial-gradient(circle at 70% 30%, var(--primary-light) 0%, transparent 70%); /* Existing gradient */
+                background-repeat: repeat, no-repeat; /* Repeat pattern, don’t repeat gradient */
+                background-size: auto, cover; /* Pattern tiles naturally, gradient covers */
+                background-position: center, center; /* Center both */
+                background-blend-mode: overlay; /* Blend pattern and gradient */
+}
+
+        /*.hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 70% 30%, var(--primary-light) 0%, transparent 70%);
+            opacity: 0.3;
+            z-index: -1;
+        }*/
+
+        .hero-content {
+            max-width: 600px;
+            margin-right: 2rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            color: #CCC;
+        }
+
+        .hero-image {
+            position: absolute;
+            right: -5%;
+            bottom: 0;
+            width: 50%;
+            max-width: 700px;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        /* AI Features */
+        .ai-features {
+            background-color: #1A1A1A;
+            margin-top: -20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: var(--secondary);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+            background: rgba(3, 218, 198, 0.1);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: #CCC;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background-color: var(--dark);
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .step-number {
+            background: var(--gradient);
+            color: var(--light);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .step-description {
+            color: #CCC;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(to right, #171717, #0F0F0F);
+            padding: 5rem 0;
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .cta-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #CCC;
+        }
+
+        /* Contact */
+        .contact {
+            background-color: var(--dark);
+        }
+
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(3, 218, 198, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--secondary);
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #CCC;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0A0A0A;
+            padding: 3rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo span {
+            color: var(--primary-light);
+        }
+
+        .footer-desc {
+            color: #999;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #CCC;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--gradient);
+            color: var(--light);
+            transform: translateY(-3px);
+        }
+
+        .footer-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: #999;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            text-align: center;
+            color: #999;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .hero-title { font-size: 2.8rem; }
+            .hero-image { width: 45%; opacity: 0.6; }
+            .footer-container { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                min-height: auto;
+                padding: 100px 0 60px;
+            }
+            .hero-content { max-width: 100%; margin-right: 0; text-align: center; }
+            .hero-btns { justify-content: center; }
+            .hero-image { position: relative; width: 80%; margin: 3rem auto 0; right: 0; }
+            .nav-links { display: none; }
+            .mobile-menu { display: block; }
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(18, 18, 18, 0.9);
+                padding: 1rem;
+            }
+            .nav-links li { margin: 1rem 0; }
+            .contact-wrapper { grid-template-columns: 1fr; }
+            .step { flex-direction: column; }
+            .step-number { margin-bottom: 1rem; }
+        }
+
+        @media (max-width: 576px) {
+            .section-title { font-size: 2rem; }
+            .hero-title { font-size: 2.2rem; }
+            .footer-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">vuluru<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#features">vuluru ai.</a></li>
+                <li><a href="#how-it-works">how it works.</a></li>
+                <li><a href="#contact">investors.</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Revolutionize Your Business with Intelligent AI Automation</h1>
+                <p class="hero-description">Boost efficiency by 50%, cut costs, and stay ahead with Vuluru—a platform that learns, innovates, and grows alongside your business.</p>
+                <div class="hero-btns">
+                    <a href="#features" class="btn btn-outline">explore</a>
+                    <a href="#" class="btn btn-primary">schedule demo</a>
+                </div>
+            </div>
+            <img class="hero-image" src="static/images/heroes.avif" alt="AI-powered business solutions in action">
+        </div>
+    </section>
+
+    <!-- AI Features -->
+    <section class="ai-features section" id="features">
+        <div class="container">
+            <h2 class="section-title">core AI automation.</h2>
+            <p class="section-subtitle">Experience the future of business management with AI that adapts and evolves with your needs.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                    <h3 class="feature-title">Adaptive Intelligence</h3>
+                    <p class="feature-description">Save time and resources with AI that predicts needs and optimizes processes in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="feature-title">Predictive Analytics</h3>
+                    <p class="feature-description">Make smarter decisions with AI forecasts that boost revenue and reduce risks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                    <h3 class="feature-title">Conversational Interface</h3>
+                    <p class="feature-description">Interact naturally with your business systems through our advanced AI that understands context and intent.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-cogs"></i></div>
+                    <h3 class="feature-title">Intelligent Automation</h3>
+                    <p class="feature-description">Eliminate repetitive tasks with smart workflows that adapt to changing conditions without human intervention.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3 class="feature-title">Proactive Security</h3>
+                    <p class="feature-description">Protect your business data with AI that monitors threats and vulnerabilities in real-time.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="feature-title">Personalized Experiences</h3>
+                    <p class="feature-description">Create custom user journeys for customers and employees with AI that learns preferences and optimizes interactions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works section" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">operate at scale.</h2>
+            <p class="section-subtitle">Our AI-powered platform works with your existing systems, transforming how you do business without disrupting operations.</p>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div>
+                        <h3 class="step-title">discovery & assessment</h3>
+                        <p class="step-description">We analyze your current systems and processes to identify key opportunities for AI enhancement, creating a customized transformation roadmap.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div>
+                        <h3 class="step-title">intelligent integration</h3>
+                        <p class="step-description">Our platform seamlessly connects with your existing infrastructure, with AI that adapts to your specific business needs and industry requirements.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div>
+                        <h3 class="step-title">continuous learning</h3>
+                        <p class="step-description">Vuluru's AI continuously improves, learning from your business data to deliver increasingly valuable insights and automation opportunities.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <div>
+                        <h3 class="step-title">measurable results</h3>
+                        <p class="step-description">Track ROI through our intuitive dashboards, with AI-powered analytics that quantify productivity gains, cost savings, and growth opportunities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Ready to Unlock Your Business’s Potential?</h2>
+            <p class="cta-description">Join leading companies using Vuluru’s AI to drive growth and efficiency—schedule your demo today.</p>
+            <a href="#" class="btn btn-primary">schedule demo</a>
+        </div>
+    </section>
+
+    <!-- Contact Us -->
+    <section class="contact section" id="contact">
+        <div class="container">
+            <h2 class="section-title">get in touch.</h2>
+            <p class="section-subtitle">Have questions or ready to explore how Vuluru can elevate your business? We're here to help.</p>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>info@vuluru.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                        <div>
+                            <h4>Availability</h4>
+                            <p>Monday - Friday: 9AM - 6PM (EST)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" class="form-control" placeholder="Enter subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" placeholder="Your message"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Message Us</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container footer-container">
+            <div>
+                <a href="#" class="footer-logo">by vuluru<span>.</span></a>
+                <p class="footer-desc">Delivering next-generation AI solutions that redefine how businesses thrive.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3 class="footer-title">Company</h3>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Solutions</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Automation</a></li>
+                    <li><a href="#">Analytics</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="footer-title">Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Documentation</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">© 2023 vuluru. All rights reserved.</div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Header Scroll Effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>
